@@ -11,6 +11,7 @@ namespace B13\DistributedLocks;
  * of the License, or any later version.
  */
 
+use Redis;
 use TYPO3\CMS\Core\Locking\Exception\LockAcquireException;
 use TYPO3\CMS\Core\Locking\Exception\LockAcquireWouldBlockException;
 use TYPO3\CMS\Core\Locking\Exception\LockCreateException;
@@ -22,7 +23,7 @@ use TYPO3\CMS\Core\Locking\LockingStrategyInterface;
 class RedisLockingStrategy implements LockingStrategyInterface
 {
     /**
-     * @var \Redis
+     * @var Redis
      */
     private $backend;
 
@@ -101,11 +102,11 @@ class RedisLockingStrategy implements LockingStrategyInterface
      * Set up redis backend.
      *
      * @param $configuration
-     * @return \Redis
+     * @return Redis
      */
-    private function connectBackend($configuration): \Redis
+    private function connectBackend($configuration): Redis
     {
-        $backend = new \Redis();
+        $backend = new Redis();
         $backend->connect($configuration['hostname'], (int)$configuration['port']);
         if (!empty($configuration['authentication'])) {
             $backend->auth($configuration['authentication']);
